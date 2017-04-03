@@ -1,0 +1,16 @@
+{
+  "version": "2",
+  "job_dispatch": {
+    "version": "v2"
+  },
+  "build_cookbook": {
+    "name": "build_cookbook",
+    "path": ".delivery/build_cookbook"
+  },
+  "truck": {
+    "single_level_project": "true"
+  },
+  "skip_phases": [],
+  "build_nodes": {},
+  "dependencies": []
+}
