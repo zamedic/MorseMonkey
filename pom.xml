@@ -237,6 +237,13 @@
           </execution>
         </executions>
       </plugin>
+
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+      </plugin>
     </plugins>
 
     <extensions>
@@ -294,5 +301,8 @@
     </repository>
   </repositories>
 
+  <scm>
+    <developerConnection>scm:git:ssh://builder@default@autobot-wkbxttwhfapcogjk.us-east-1.opsworks-cm.io:8989/default/Marc/MorseMonkey</developerConnection>
+  </scm>
 
 </project>

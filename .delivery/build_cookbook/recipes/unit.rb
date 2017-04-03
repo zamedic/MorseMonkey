@@ -6,7 +6,7 @@
 
 secrets = get_project_secrets
 
-maven_setting 'settings.servers' do
+maven_settings 'settings.servers' do
   value 'server' => {
       'id' => 's3.releases',
       'username' => secrets['s3-user'],
