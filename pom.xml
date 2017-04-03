@@ -238,6 +238,14 @@
         </executions>
       </plugin>
     </plugins>
+
+    <extensions>
+      <extension>
+        <groupId>org.kuali.maven.wagons</groupId>
+        <artifactId>maven-s3-wagon</artifactId>
+        <version>1.2.1</version>
+      </extension>
+    </extensions>
   </build>
 
   <profiles>
@@ -269,7 +277,22 @@
       </properties>
     </profile>
   </profiles>
-
+  <distributionManagement>
+    <snapshotRepository>
+      <id>s3.releases</id>
+      <url>s3://maven-releases/snapshot</url>
+    </snapshotRepository>
+    <repository>
+      <id>s3.releases</id>
+      <url>s3://maven-releases/release</url>
+    </repository>
+  </distributionManagement>
+  <repositories>
+    <repository>
+      <id>s3.releases</id>
+      <url>s3://maven-releases/release</url>
+    </repository>
+  </repositories>
 
 
 </project>
