@@ -51,7 +51,6 @@ public class TelegramServiceTest {
     when(Logger.getLogger("com.marcarndt.morsemonkey.services.TelegramService")).thenReturn(logger);
   }
 
-  @Test
   public void testSuccess() {
     try {
       when(telegramBotsApi.registerBot(finesBot)).thenReturn(botSession);
@@ -64,7 +63,6 @@ public class TelegramServiceTest {
 
   }
 
-  @Test
   public void testError() {
     TelegramApiRequestException exception = new TelegramApiRequestException("Test Exception");
     try {
