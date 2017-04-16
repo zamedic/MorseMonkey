@@ -319,7 +319,7 @@
       </properties>
     </profile>
   </profiles>
-  <!--
+  
   <distributionManagement>
     <snapshotRepository>
       <id>s3.releases</id>
@@ -336,8 +336,8 @@
       <url>s3://maven-releases/release</url>
     </repository>
   </repositories>
--->
 
+<!--
   <distributionManagement>
     <snapshotRepository>
       <id>snapshots</id>
@@ -348,6 +348,7 @@
       <url>http://nexus.standardbank.co.za:8090/nexus/content/repositories/releases</url>
     </repository>
   </distributionManagement>
+  -->
   <scm>
     <developerConnection>scm:git:ssh://builder@default@autobot-wkbxttwhfapcogjk.us-east-1.opsworks-cm.io:8989/default/Marc/MorseMonkey</developerConnection>
   </scm>
