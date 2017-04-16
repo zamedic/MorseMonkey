@@ -1,0 +1,3 @@
+cheflogfile - Downloads a chef log file for a node
+chefstacktrace - Downloads a chef stackttrace for a node
+help - Show me what Bender can do

@@ -2,6 +2,8 @@ package com.marcarndt.morsemonkey.telegram.alerts.command;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.Stateless;
+import org.telegram.telegrambots.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -13,6 +15,7 @@ import sun.rmi.runtime.Log;
 /**
  * Created by arndt on 2017/04/06.
  */
+@Stateless
 public class StartCommand extends BotCommand {
   private static Logger LOG = Logger.getLogger(StartCommand.class.getName());
 
@@ -29,10 +32,12 @@ public class StartCommand extends BotCommand {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setText("For me to send alerts, please use group chat ID: "+chat.getId());
     sendMessage.setChatId(chat.getId());
+
     try {
       absSender.sendMessage(sendMessage);
     } catch (TelegramApiException e) {
       LOG.log(Level.WARNING,"Error sending response",e);
     }
   }
+
 }

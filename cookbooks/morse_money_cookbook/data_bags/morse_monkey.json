@@ -1,0 +1,40 @@
+{
+  "acceptance": {
+    "ssh": {
+      "connections": [
+        {
+          "id": ""
+          "username": "",
+          "key": {
+            "databag_secret": "",
+          },
+          "password_secret": ""
+        }
+      ]
+    },
+    "chef": {
+      "key": {
+        "databag_secret": ""
+      }
+    },
+    "recipes": [
+      {
+        "name": "Morse Monkey",
+        "recipe": "morse_monkey_cookbook"
+      }
+    ],
+    "users": [
+      {
+        "name":"Marc",
+        "id":225566792
+      }
+    ],
+    "monitor": {
+      "endpoints":[]
+    },
+    "bot":{
+      "name":"",
+      "databag_secret":""
+    }
+  }
+}

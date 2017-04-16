@@ -5,13 +5,22 @@ package com.marcarndt.morsemonkey.utils;
  */
 public class BotConfig {
 
-  public static String getBotName(){
-    return System.getProperty("botname");
+  static String username;
+  static String key;
+
+  public static String getUsername() {
+    return username;
   }
 
-  public static String getBotAPI(){
-    return System.getProperty("botkey");
-
+  public static void setUsername(String username) {
+    BotConfig.username = username;
   }
 
+  public static String getKey() {
+    return key;
+  }
+
+  public static void setKey(String key) {
+    BotConfig.key = key;
+  }
 }

@@ -16,16 +16,22 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 @Startup
 @Singleton
 public class ScheduledTasks {
-  private static Logger LOG = Logger.getLogger(ScheduledTasks.class.getName());
 
+  private static Logger LOG = Logger.getLogger(ScheduledTasks.class.getName());
 
   @Inject
   TelegramService telegramService;
 
+  @Inject
+  SinopiaService sinopiaService;
 
-  @Schedule(hour = "9",minute = "15", dayOfWeek = "Mon, Tue, Wed, Thu, Fri")
-  public void remindStanup(){
-    sendMessage("Standup in 15 minutes. "+ Quotes.getRandomQuote());
+  @Inject
+  HttpChecker httpChecker;
+
+
+  @Schedule(hour = "9", minute = "15", dayOfWeek = "Mon, Tue, Wed, Thu, Fri")
+  public void remindStanup() {
+    sendMessage("Standup in 15 minutes. " + Quotes.getRandomQuote());
 
   }
 
@@ -36,13 +42,23 @@ public class ScheduledTasks {
     try {
       telegramService.getAlertBot().sendMessage(sendMessage);
     } catch (TelegramApiException e) {
-      LOG.log(Level.WARNING,e.getMessage(),e);
+      LOG.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
-  @Schedule(hour = "9",minute = "30", dayOfWeek = "Mon, Tue, Wed, Thu, Fri")
-  public void startStandup(){
+  @Schedule(hour = "9", minute = "30", dayOfWeek = "Mon, Tue, Wed, Thu, Fri")
+  public void startStandup() {
     sendMessage("If you are not at Standup, you are officially late.");
+  }
+
+  @Schedule(hour = "*", minute = "*/10")
+  public void checkSinopia() {
+    sinopiaService.runChecks();
+  }
+
+  @Schedule(hour = "*", minute = "1,21,41")
+  public void checkSbisDev() {
+    httpChecker.runChecks();
   }
 
 

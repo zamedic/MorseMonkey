@@ -1,0 +1,11 @@
+ssh:
+  keyfile: d:/workspace/sbsa/morsemonkey_ssh.key
+  username: root
+  password: ask4help
+bot:
+  key: 303007671:AAHxx3PI9zU5q-4a43WmQXU3K-A6yGY1DAU
+  name: marctestbot
+chef:
+  key: d:/workspace/sbsa/morsemonkey_chef.key
+users:
+  file: d:/workspace/aws/users.txt
