@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class Quotes {
 
-  private static String[] quotes = {
+  private static final String[] quotes = {
       "This is the worst kind of discrimination there is: the kind against me!",
       "I guess if you want children beaten, you have to do it yourself.",
       "Hahahahaha. Oh wait youre serious. Let me laugh even harder.",
@@ -48,7 +48,7 @@ public class Quotes {
       "Hey! Do I preach to you when you're a lyin' stone in the gutter?? No.... So beat it!!"
   };
 
-  public static String getRandomQuote() {
+  public static final String getRandomQuote() {
     int pos = new Random().nextInt(quotes.length);
     return quotes[pos];
   }

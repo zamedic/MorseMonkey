@@ -15,8 +15,10 @@ public class ProxyBotOptions {
 
   public static DefaultBotOptions getProxyBotOptions() {
     DefaultBotOptions defaultBotOptions = new DefaultBotOptions();
-    HttpHost proxy = new HttpHost("pchop81.standardbank.co.za", 8067);
-    defaultBotOptions.setRequestConfig(RequestConfig.custom().setProxy(proxy).build());
+    if(BotConfig.getProxyUrl() != null && BotConfig.getProxyPort() != null) {
+      HttpHost proxy = new HttpHost(BotConfig.getProxyUrl(), BotConfig.proxyPort);
+      defaultBotOptions.setRequestConfig(RequestConfig.custom().setProxy(proxy).build());
+    }
 
     return defaultBotOptions;
   }

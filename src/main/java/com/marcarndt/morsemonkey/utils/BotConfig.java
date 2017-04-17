@@ -7,8 +7,10 @@ public class BotConfig {
 
   static String username;
   static String key;
+  static String proxyUrl;
+  static Integer proxyPort;
 
-  public static String getUsername() {
+  public static final String getUsername() {
     return username;
   }
 
@@ -16,11 +18,27 @@ public class BotConfig {
     BotConfig.username = username;
   }
 
-  public static String getKey() {
+  public static final String getKey() {
     return key;
   }
 
   public static void setKey(String key) {
     BotConfig.key = key;
+  }
+
+  public static final String getProxyUrl() {
+    return proxyUrl;
+  }
+
+  public static void setProxyUrl(String proxyUrl) {
+    BotConfig.proxyUrl = proxyUrl;
+  }
+
+  public static Integer getProxyPort() {
+    return proxyPort;
+  }
+
+  public static void setProxyPort(Integer proxyPort) {
+    BotConfig.proxyPort = proxyPort;
   }
 }

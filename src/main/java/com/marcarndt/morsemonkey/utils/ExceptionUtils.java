@@ -8,7 +8,7 @@ import java.io.PrintStream;
  */
 public class ExceptionUtils {
 
-  public static String exceptionStacktraceToString(Exception e)
+  public static final String exceptionStacktraceToString(Exception e)
   {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PrintStream ps = new PrintStream(baos);

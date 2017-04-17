@@ -15,7 +15,7 @@ module MorseMonkey
               keyFile.write(keyContent)
             end
 
-            file.puts("#{server.id},#{server.username},#{keyFileName},#{server.password}")
+            file.puts("#{server.id},#{server.username},#{keyFileName},#{server.password},#{server.require_sudo}")
           end
         end
       end

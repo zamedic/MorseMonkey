@@ -1,6 +1,7 @@
 package com.marcarndt.morsemonkey.services;
 
 import com.marcarndt.morsemonkey.bender.Quotes;
+import com.marcarndt.morsemonkey.telegram.alerts.MorseBot;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Schedule;
@@ -26,6 +27,9 @@ public class ScheduledTasks {
   SinopiaService sinopiaService;
 
   @Inject
+  MorseBot morseBot;
+
+  @Inject
   HttpChecker httpChecker;
 
 
@@ -40,7 +44,7 @@ public class ScheduledTasks {
     sendMessage.setChatId("-206812535");
     sendMessage.setText(message);
     try {
-      telegramService.getAlertBot().sendMessage(sendMessage);
+      morseBot.sendMessage(sendMessage);
     } catch (TelegramApiException e) {
       LOG.log(Level.WARNING, e.getMessage(), e);
     }

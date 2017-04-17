@@ -1,7 +1,7 @@
 package com.marcarndt.morsemonkey.services;
 
-import com.marcarndt.morsemonkey.telegram.alerts.AlertBot;
-import com.marcarndt.morsemonkey.telegram.alerts.command.UserCommandService;
+import com.marcarndt.morsemonkey.services.data.BotDetails;
+import com.marcarndt.morsemonkey.telegram.alerts.MorseBot;
 import com.marcarndt.morsemonkey.utils.BotConfig;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,10 +12,10 @@ import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import org.mongodb.morphia.query.Query;
 import org.telegram.telegrambots.ApiContext;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.generics.BotSession;
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
@@ -26,34 +26,35 @@ import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 @Startup
 @Singleton
 public class TelegramService {
-  AlertBot alertBot;
 
   Logger LOG = Logger.getLogger(TelegramService.class.getName());
   private TelegramBotsApi api = new TelegramBotsApi();
 
-  @Inject
-  SCPService scpService;
 
   @Inject
-  UserService userService ;
+  MorseBot morseBot;
 
   @Inject
-  ChefService chefService;
+  MongoService mongoService;
 
   @Inject
-  UserCommandService userCommandService;
+  @ConfigurationValue("bot.name")
+  String botName;
 
   @Inject
   @ConfigurationValue("bot.key")
   String botKey;
 
   @Inject
-  @ConfigurationValue("bot.name")
-  String botName;
+  @ConfigurationValue("bot.proxy.url")
+  String botProxyUrl;
 
-
+  @Inject
+  @ConfigurationValue("bot.proxy.port")
+  Integer botProxyPort;
 
   public TelegramService() {
+
   }
 
 
@@ -62,64 +63,15 @@ public class TelegramService {
     LOG.info("Starting to initialize bots");
     BotConfig.setUsername(botName);
     BotConfig.setKey(botKey);
+    BotConfig.setProxyUrl(botProxyUrl);
+    BotConfig.setProxyPort(botProxyPort);
     try {
       ApiContextInitializer.init();
-      alertBot = new AlertBot(this);
-      getApi().registerBot(alertBot);
+      api.registerBot(morseBot);
       LOG.info("Bot initialization completed");
     } catch (TelegramApiRequestException e) {
       LOG.log(Level.SEVERE, e.getMessage(), e);
     }
   }
 
-  @PreDestroy
-  public void destroy() {
-    BotSession session = (BotSession) ApiContext.getInstance(BotSession.class);
-    session.stop();
-  }
-
-  public AlertBot getAlertBot() {
-    return alertBot;
-  }
-
-
-  public boolean getStatus() {
-    return true;
-  }
-
-  private TelegramBotsApi getApi() {
-    return api;
-  }
-
-  protected void setApi(TelegramBotsApi api) {
-    this.api = api;
-  }
-
-  @Lock(LockType.READ)
-  public SCPService getScpService() {
-    return scpService;
-  }
-
-  public String getBotKey() {
-    return botKey;
-  }
-
-  public String getBotName() {
-    return botName;
-  }
-
-  @Lock(LockType.READ)
-  public UserService getUserService() {
-    return userService;
-  }
-
-  @Lock(LockType.READ)
-  public ChefService getChefService() {
-    return chefService;
-  }
-
-  @Lock(LockType.READ)
-  public UserCommandService getUserCommandService() {
-    return userCommandService;
-  }
 }

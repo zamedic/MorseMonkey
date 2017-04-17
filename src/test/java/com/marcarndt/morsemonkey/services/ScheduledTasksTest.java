@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.marcarndt.morsemonkey.telegram.alerts.AlertBot;
+import com.marcarndt.morsemonkey.telegram.alerts.MorseBot;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,11 +24,11 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
  * Created by arndt on 2017/04/09.
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AlertBot.class, AbsSender.class})
+@PrepareForTest({MorseBot.class, AbsSender.class})
 public class ScheduledTasksTest {
 
   @Mock
-  private transient AlertBot alertBot;
+  private transient MorseBot morseBot;
 
   @Mock
   private transient TelegramService telegramService;
@@ -38,21 +38,21 @@ public class ScheduledTasksTest {
 
   @Before
   public void setUp() {
-    when(telegramService.getAlertBot()).thenReturn(alertBot);
+    when(telegramService.getMorseBot()).thenReturn(morseBot);
   }
 
   @Test
   public void remindStanup() {
-    final Message message = new Message();
+    Message message = new Message();
     try {
-      when(alertBot.sendMessage(any(SendMessage.class))).thenReturn(message);
+      when(morseBot.sendMessage(any(SendMessage.class))).thenReturn(message);
     } catch (TelegramApiException e) {
       fail(e.getMessage());
     }
 
-    final ArgumentMatcher<SendMessage> matcher = new ArgumentMatcher<SendMessage>() {
+    ArgumentMatcher<SendMessage> matcher = new ArgumentMatcher<SendMessage>() {
       @Override
-      public boolean matches(final SendMessage sendMessage) {
+      public boolean matches(SendMessage sendMessage) {
         return sendMessage.getText().startsWith("Standup in 15 minutes.");
       }
     };
@@ -60,7 +60,7 @@ public class ScheduledTasksTest {
     scheduledTasks.remindStanup();
 
     try {
-      verify(alertBot).sendMessage(argThat(matcher));
+      verify(morseBot).sendMessage(argThat(matcher));
     } catch (TelegramApiException e) {
       fail(e.getMessage());
     }
@@ -69,16 +69,16 @@ public class ScheduledTasksTest {
 
   @Test
   public void startStandup() {
-    final Message message = new Message();
+    Message message = new Message();
     try {
-      when(alertBot.sendMessage(any(SendMessage.class))).thenReturn(message);
+      when(morseBot.sendMessage(any(SendMessage.class))).thenReturn(message);
     } catch (TelegramApiException e) {
       fail(e.getMessage());
     }
 
-    final ArgumentMatcher<SendMessage> matcher = new ArgumentMatcher<SendMessage>() {
+    ArgumentMatcher<SendMessage> matcher = new ArgumentMatcher<SendMessage>() {
       @Override
-      public boolean matches( final SendMessage sendMessage) {
+      public boolean matches( SendMessage sendMessage) {
         return sendMessage.getText().startsWith("If you are not at Standup, you are officially late.");
       }
     };
@@ -86,7 +86,7 @@ public class ScheduledTasksTest {
     scheduledTasks.startStandup();
 
     try {
-      verify(alertBot).sendMessage(argThat(matcher));
+      verify(morseBot).sendMessage(argThat(matcher));
     } catch (TelegramApiException e) {
       fail(e.getMessage());
     }
@@ -94,8 +94,8 @@ public class ScheduledTasksTest {
 
   }
 
-  public AlertBot getAlertBot() {
-    return alertBot;
+  public MorseBot getMorseBot() {
+    return morseBot;
   }
 
   public TelegramService getTelegramService() {

@@ -25,8 +25,7 @@ directory node['morse_monkey_cookbook']['dir'] do
   recursive true
 end
 
-include_recipe 'morce_monkey::application_yml'
-include_recuoe 'morse_monkey::users'
+include_recipe 'morce_monkey::config_files'
 
 write_auth()
 

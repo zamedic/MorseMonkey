@@ -3,38 +3,53 @@
     "ssh": {
       "connections": [
         {
-          "id": ""
+          "id": "",
           "username": "",
           "key": {
             "databag_secret": "",
           },
-          "password_secret": ""
+          "password_secret": "",
+          "require_sudo": false
         }
       ]
     },
     "chef": {
+      "user": "",
+      "org": "",
+      "server": "",
       "key": {
         "databag_secret": ""
       }
     },
     "recipes": [
       {
-        "name": "Morse Monkey",
-        "recipe": "morse_monkey_cookbook"
+        "description": "Morse Monkey",
+        "name": "morse_monkey_cookbook"
       }
     ],
     "users": [
       {
-        "name":"Marc",
-        "id":225566792
+        "name": "Marc",
+        "id": 225566792
       }
     ],
     "monitor": {
-      "endpoints":[]
+      "endpoints": [
+        {
+          "name": "",
+          "url": "",
+          "commands": []
+        }
+      ]
     },
-    "bot":{
-      "name":"",
-      "databag_secret":""
+    "bot": {
+      "name": "",
+      "databag_secret": "",
+      "group": ""
+    },
+    "commands": {
+      "id": "",
+      "command": ""
     }
   }
 }

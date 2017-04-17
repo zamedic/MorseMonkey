@@ -1,10 +1,12 @@
 package com.marcarndt.morsemonkey.telegram.alerts.command;
 
-import com.marcarndt.morsemonkey.services.ChefService.Recipe;
-import com.marcarndt.morsemonkey.services.TelegramService;
-import com.marcarndt.morsemonkey.telegram.alerts.command.UserCommandService.Command;
+import com.marcarndt.morsemonkey.services.RecipeService;
+import com.marcarndt.morsemonkey.services.StateService;
+import com.marcarndt.morsemonkey.services.StateService.State;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -17,14 +19,13 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 /**
  * Created by arndt on 2017/04/13.
  */
+@Stateless
 public class FindNodes extends BaseCommand {
 
-  /**
-   * Construct a command
-   */
-  public FindNodes(TelegramService telegramService) {
-    super("find_nodes", "Finds nodes for an application", telegramService);
-  }
+  @Inject
+  RecipeService recipeService;
+  @Inject
+  StateService stateService;
 
   @Override
   protected void performCommand(AbsSender absSender, User user, Chat chat, String[] arguments) {
@@ -34,8 +35,10 @@ public class FindNodes extends BaseCommand {
     KeyboardRow keyboardRow = new KeyboardRow();
     List<KeyboardRow> keyboardRowList = new ArrayList<>();
 
-    for (Recipe recipe : Recipe.values()) {
-      keyboardRow.add(new KeyboardButton(recipe.getDescription()));
+    List<String> recipes = recipeService.getRecipeDescriptions();
+
+    for (String recipe : recipes) {
+      keyboardRow.add(new KeyboardButton(recipe));
       count++;
       if (count % 3 == 0) {
         keyboardRowList.add(keyboardRow);
@@ -52,14 +55,21 @@ public class FindNodes extends BaseCommand {
     sendMessage.setText("Select Application");
     sendMessage.setChatId(chat.getId());
 
-
     try {
       absSender.sendMessage(sendMessage);
-      telegramService.getUserCommandService().addCommand(user.getId(), Command.NODE_LIST);
+      stateService.setState(user.getId(), chat.getId(), State.NODE_LIST_FOR_RECIPE);
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }
+  }
 
+  @Override
+  public String getCommandIdentifier() {
+    return "find";
+  }
 
+  @Override
+  public String getDescription() {
+    return "Find a node";
   }
 }

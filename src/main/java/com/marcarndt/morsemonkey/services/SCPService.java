@@ -21,8 +21,8 @@ import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 @Stateless
 public class SCPService {
 
-  private final String sshNoKey = "-oStrictHostKeyChecking=no";
-  private final String noKnownHostFile = "-oUserKnownHostsFile=/dev/null";
+  private String sshNoKey = "-oStrictHostKeyChecking=no";
+  private String noKnownHostFile = "-oUserKnownHostsFile=/dev/null";
   public static final String domain = ".standardbank.co.za";
   private static Logger LOG = Logger.getLogger(SCPService.class.getName());
 

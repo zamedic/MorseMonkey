@@ -1,11 +1,16 @@
 package com.marcarndt.morsemonkey.telegram.alerts.command;
 
 import com.marcarndt.morsemonkey.bender.Quotes;
+import com.marcarndt.morsemonkey.services.SCPService;
 import com.marcarndt.morsemonkey.services.TelegramService;
+import com.marcarndt.morsemonkey.services.UserService.Role;
 import com.marcarndt.morsemonkey.services.dto.SCPResponse;
+import com.marcarndt.morsemonkey.telegram.alerts.MorseBot;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import org.telegram.telegrambots.api.methods.send.SendDocument;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -16,20 +21,16 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 /**
  * Created by arndt on 2017/04/11.
  */
+@Stateless
 public class FileCommand extends BaseCommand {
 
   private static Logger LOG = Logger.getLogger(FileCommand.class.getName());
   String filename;
 
-  /**
-   * Construct a command
-   */
-  public FileCommand(String commandIdentifier, String description, String filename,
-      TelegramService telegramService) {
-    super(commandIdentifier, description, telegramService);
-    this.filename = filename;
-  }
-
+  @Inject
+  MorseBot morseBot;
+  @Inject
+  SCPService scpService;
 
   @Override
   protected void performCommand(AbsSender absSender, User user, Chat chat, String[] arguments) {
@@ -42,7 +43,7 @@ public class FileCommand extends BaseCommand {
               .getRandomQuote());
       return;
     }
-    SCPResponse response = telegramService.getScpService().fetchFile(arguments[0], filename);
+    SCPResponse response = scpService.fetchFile(arguments[0], filename);
 
     if (!response.isSuccessful()) {
       sendErrorDocument(absSender, chat, response);
@@ -68,4 +69,13 @@ public class FileCommand extends BaseCommand {
   }
 
 
+  @Override
+  public String getCommandIdentifier() {
+    return "file";
+  }
+
+  @Override
+  public String getDescription() {
+    return "retreives a file";
+  }
 }

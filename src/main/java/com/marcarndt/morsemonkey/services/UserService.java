@@ -1,53 +1,85 @@
 package com.marcarndt.morsemonkey.services;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
+import com.marcarndt.morsemonkey.services.data.User;
+import com.marcarndt.morsemonkey.services.data.UserRole;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 /**
  * Created by arndt on 2017/04/13.
  */
-@Singleton
+@Stateless
 public class UserService {
 
   private static Logger LOG = Logger.getLogger(UserService.class.getName());
 
   @Inject
-  @ConfigurationValue("users.file")
-  String usersFile;
+  MongoService mongoService;
 
+  public boolean validateUser(Integer id, Role role) {
+    if (role.equals(Role.UNAUTHENTICATED)) {
+      return true;
+    }
 
-  HashMap<Integer, String> frontEnd = new HashMap<>();
+    User user = mongoService.getDatastore().createQuery(User.class).field("userId").equal(id).get();
+    if (role.equals(Role.USER) && user != null) {
+      return true;
+    }
+    if (user == null) {
+      return false;
+    }
 
-  @PostConstruct
-  public void setupUsers() {
-    String line = null;
-    try {
-      BufferedReader reader = new BufferedReader(new FileReader(usersFile));
-      while ((line = reader.readLine()) != null) {
-        StringTokenizer stringTokenizer = new StringTokenizer(line, ":");
-        String name = stringTokenizer.nextToken();
-        Integer id = Integer.parseInt(stringTokenizer.nextToken());
-        frontEnd.put(id, name);
-      }
-    } catch (FileNotFoundException e) {
-      LOG.log(Level.SEVERE,"Error loading user file",e);
-    } catch (IOException e) {
-      LOG.log(Level.SEVERE,"Error loading user file",e);
+    UserRole userRole = getUserRole(role);
+    return userRole.getUsers().contains(user);
+  }
+
+  public boolean adminUserExists() {
+
+    UserRole userRole = getUserRole(Role.USER_ADMIN);
+    return userRole != null && !(userRole.getUsers() == null || userRole.getUsers().size() == 0);
+
+  }
+
+  private UserRole getUserRole(Role role) {
+    return mongoService.getDatastore().createQuery(UserRole.class).field("role")
+        .equal(role.toString()).get();
+  }
+
+  public void addUser(int id, String name, Role... roles) {
+    User user = mongoService.getDatastore().createQuery(User.class).field("userId").equal(id).get();
+    if (user == null) {
+      user = new User();
+    }
+    user.setName(name);
+    user.setUserId(id);
+    mongoService.getDatastore().save(user);
+
+    for (Role role : roles) {
+      addUserToRole(user, role);
     }
   }
 
-  public boolean validateFrontend(Integer id) {
-    return frontEnd.containsKey(id);
+  private void addUserToRole(User user, Role role) {
+    UserRole userRole = getUserRole(role);
+    if (userRole == null) {
+      userRole = new UserRole();
+    }
+    List<User> users = userRole.getUsers();
+    if (users == null) {
+      users = new ArrayList<>();
+    }
+    if (!users.contains(user)) {
+      users.add(user);
+    }
+    userRole.setUsers(users);
+    mongoService.getDatastore().save(userRole);
+  }
+
+  public enum Role {
+    USER_ADMIN, COMMAND, USER, UNAUTHENTICATED, ADMINISTRATOR
   }
 
 }
