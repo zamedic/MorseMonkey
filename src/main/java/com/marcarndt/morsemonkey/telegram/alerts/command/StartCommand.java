@@ -1,6 +1,5 @@
 package com.marcarndt.morsemonkey.telegram.alerts.command;
 
-import com.marcarndt.morsemonkey.services.TelegramService;
 import com.marcarndt.morsemonkey.services.UserService;
 import com.marcarndt.morsemonkey.services.UserService.Role;
 import java.util.logging.Level;
@@ -37,8 +36,8 @@ public class StartCommand extends BotCommand {
       LOG.log(Level.WARNING, "Error sending response", e);
     }
 
-    if(!userService.adminUserExists()){
-      userService.addUser(user.getId(),user.getFirstName(), Role.USER_ADMIN);
+    if (!userService.adminUserExists()) {
+      userService.addUser(user.getId(), user.getFirstName(), user.getLastName(), Role.USER_ADMIN);
       sendMessage = new SendMessage();
       sendMessage.setText("You have been added as a user administrator");
       sendMessage.setChatId(chat.getId());

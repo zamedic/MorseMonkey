@@ -1,18 +1,22 @@
 package com.marcarndt.morsemonkey.telegram.alerts.command;
 
 import com.marcarndt.morsemonkey.exception.MorseMonkeyException;
+import com.marcarndt.morsemonkey.services.StateService.State;
 import com.marcarndt.morsemonkey.services.UserService;
 import com.marcarndt.morsemonkey.services.UserService.Role;
 import com.marcarndt.morsemonkey.services.dto.SSHResponse;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.telegram.telegrambots.api.methods.send.SendDocument;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.User;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -26,7 +30,7 @@ public abstract class BaseCommand extends BotCommand {
   UserService userService;
 
   private static Logger LOG = Logger.getLogger(BaseCommand.class.getName());
-  Role role;
+
 
   /**
    * Construct a command
@@ -78,7 +82,7 @@ public abstract class BaseCommand extends BotCommand {
 
   @Override
   public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-    if (!userService.validateUser(user.getId(), role)) {
+    if (!userService.validateUser(user.getId(), getRole())) {
       sendMessage(absSender, chat,
           "User not allowed to perform the " + getCommandIdentifier() + " transaction");
       LOG.warning("User " + user.getId() + " - " + user.getFirstName() + " attempted to perform "
@@ -89,6 +93,20 @@ public abstract class BaseCommand extends BotCommand {
 
   }
 
+  protected ReplyKeyboardMarkup getReplyKeyboardMarkup() {
+    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+    replyKeyboardMarkup.setOneTimeKeyboad(true);
+    replyKeyboardMarkup.setResizeKeyboard(true);
+    replyKeyboardMarkup.setSelective(true);
+    return replyKeyboardMarkup;
+  }
+
+  protected abstract Role getRole();
+
   protected abstract void performCommand(AbsSender absSender, User user, Chat chat,
       String[] arguments);
+
+  public abstract List<State> canHandleStates();
+
+  public abstract void handleState(Message message, State state);
 }

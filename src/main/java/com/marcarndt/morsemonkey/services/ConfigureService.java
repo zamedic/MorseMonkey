@@ -20,7 +20,7 @@ public class ConfigureService {
   }
 
   public String getGroupKey() throws MorseMonkeyException {
-    BotDetails botDetails = mongoService.getDatastore().createQuery(BotDetails.class).get();
+    BotDetails botDetails = getBotDetails();
     if (botDetails == null) {
       throw new MorseMonkeyException("Group channel has not been configured");
     }
@@ -28,5 +28,17 @@ public class ConfigureService {
 
   }
 
+  private BotDetails getBotDetails() {
+    return mongoService.getDatastore().createQuery(BotDetails.class).get();
+  }
 
+
+  public void setGroupKey(String key) {
+    BotDetails botDetails = getBotDetails();
+    if(botDetails == null){
+      botDetails = new BotDetails();
+    }
+    botDetails.setGroupId(key);
+    mongoService.getDatastore().save(botDetails);
+  }
 }

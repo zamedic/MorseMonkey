@@ -2,12 +2,15 @@ package com.marcarndt.morsemonkey.telegram.alerts.command;
 
 import com.marcarndt.morsemonkey.bender.Quotes;
 import com.marcarndt.morsemonkey.services.SCPService;
-import com.marcarndt.morsemonkey.services.TelegramService;
+import com.marcarndt.morsemonkey.services.StateService.State;
 import com.marcarndt.morsemonkey.services.UserService.Role;
 import com.marcarndt.morsemonkey.services.dto.SSHResponse;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.telegram.telegrambots.api.objects.Chat;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 
@@ -22,6 +25,11 @@ public class SSHCommand extends BaseCommand {
 
   String command;
 
+
+  @Override
+  protected Role getRole() {
+    return Role.COMMAND;
+  }
 
   @Override
   protected void performCommand(AbsSender absSender, User user, Chat chat, String[] arguments) {
@@ -44,6 +52,16 @@ public class SSHCommand extends BaseCommand {
   }
 
   @Override
+  public List<State> canHandleStates() {
+    return new ArrayList<>();
+  }
+
+  @Override
+  public void handleState(Message message, State state) {
+
+  }
+
+  @Override
   public String getCommandIdentifier() {
     return "ssh";
   }
@@ -52,4 +70,6 @@ public class SSHCommand extends BaseCommand {
   public String getDescription() {
     return "executes an ssh command";
   }
+
+
 }

@@ -6,15 +6,15 @@ import com.marcarndt.morsemonkey.services.ConfigureService;
 import com.marcarndt.morsemonkey.services.RecipeService;
 import com.marcarndt.morsemonkey.services.StateService;
 import com.marcarndt.morsemonkey.services.StateService.State;
-import com.marcarndt.morsemonkey.services.dto.Node;
+import com.marcarndt.morsemonkey.telegram.alerts.command.BaseCommand;
 import com.marcarndt.morsemonkey.telegram.alerts.command.ChefNodeBot;
 import com.marcarndt.morsemonkey.telegram.alerts.command.ConfigureCommand;
 import com.marcarndt.morsemonkey.telegram.alerts.command.FindNodes;
 import com.marcarndt.morsemonkey.telegram.alerts.command.HelpCommand;
 import com.marcarndt.morsemonkey.telegram.alerts.command.StartCommand;
+import com.marcarndt.morsemonkey.telegram.alerts.command.UserAdminCommand;
 import com.marcarndt.morsemonkey.utils.BotConfig;
 import com.marcarndt.morsemonkey.utils.ProxyBotOptions;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -26,6 +26,7 @@ import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.bots.TelegramLongPollingCommandBot;
+import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 /**
@@ -46,12 +47,13 @@ public class MorseBot extends TelegramLongPollingCommandBot {
   @Inject
   ConfigureCommand configureCommand;
   @Inject
+  UserAdminCommand userAdminCommand;
+  @Inject
   StateService stateService;
   @Inject
   ConfigureService configureService;
   @Inject
   RecipeService recipeService;
-
 
   public MorseBot() {
     super(ProxyBotOptions.getProxyBotOptions());
@@ -61,6 +63,7 @@ public class MorseBot extends TelegramLongPollingCommandBot {
   public void setup() {
     register(startCommand);
     register(configureCommand);
+    register(userAdminCommand);
     register(chefNodeBot);
     register(findNodes);
     register(helpCommand);
@@ -70,7 +73,7 @@ public class MorseBot extends TelegramLongPollingCommandBot {
   public void processNonCommandUpdate(Update update) {
     LOG.info("Receives update");
     if (update.getMessage().getNewChatMember() != null) {
-      sendMessage("Ahhh Yeah,e one more human to worship me. I am Bender!",
+      sendMessage("Ahhh Yeah, one more human to worship me. I am Bender!",
           update.getMessage().getChatId().toString());
       return;
     }
@@ -87,7 +90,8 @@ public class MorseBot extends TelegramLongPollingCommandBot {
       return;
     }
     try {
-      State state =stateService.getUserState(update.getMessage().getFrom().getId(),update.getMessage().getChatId());
+      State state = stateService
+          .getUserState(update.getMessage().getFrom().getId(), update.getMessage().getChatId());
       handleUpdate(update.getMessage(), state);
       return;
     } catch (MorseMonkeyException e) {
@@ -100,26 +104,14 @@ public class MorseBot extends TelegramLongPollingCommandBot {
   }
 
   private void handleUpdate(Message message, State command) {
-    switch (command) {
-      case CONFIGURE:
-        configureCommand.handleUpdate(message,command);
-      case NODE_LIST_FOR_RECIPE:
-        handle_node_list(message);
-        break;
-    }
-  }
-
-  private void handle_node_list(Message message) {
-
-    List<Node> nodes = recipeService.getNodesForRecipe(message.getText());
-    if (nodes.size() == 0) {
-      sendMessage("No nodes found for " + message.getText(), message.getChatId().toString());
-    } else {
-      StringBuilder stringBuilder = new StringBuilder();
-      for (Node node : nodes) {
-        stringBuilder.append(node.toString() + "\n");
+    for (BotCommand botCommand : getRegisteredCommands()) {
+      if (botCommand instanceof BaseCommand) {
+        BaseCommand baseCommand = (BaseCommand) botCommand;
+        if (baseCommand.canHandleStates() != null && baseCommand.canHandleStates()
+            .contains(command)) {
+          baseCommand.handleState(message, command);
+        }
       }
-      sendMessage(stringBuilder.toString(), message.getChatId().toString());
     }
   }
 
@@ -139,7 +131,7 @@ public class MorseBot extends TelegramLongPollingCommandBot {
     try {
       return sendMessage(message, configureService.getGroupKey());
     } catch (MorseMonkeyException e) {
-      LOG.log(Level.WARNING,"Error sending alert",e);
+      LOG.log(Level.WARNING, "Error sending alert", e);
       return false;
     }
   }

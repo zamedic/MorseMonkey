@@ -3,12 +3,14 @@ package com.marcarndt.morsemonkey.telegram.alerts.command;
 import com.marcarndt.morsemonkey.services.RecipeService;
 import com.marcarndt.morsemonkey.services.StateService;
 import com.marcarndt.morsemonkey.services.StateService.State;
+import com.marcarndt.morsemonkey.services.UserService.Role;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -26,6 +28,11 @@ public class FindNodes extends BaseCommand {
   RecipeService recipeService;
   @Inject
   StateService stateService;
+
+  @Override
+  protected Role getRole() {
+    return Role.USER;
+  }
 
   @Override
   protected void performCommand(AbsSender absSender, User user, Chat chat, String[] arguments) {
@@ -61,6 +68,16 @@ public class FindNodes extends BaseCommand {
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public List<State> canHandleStates() {
+    return new ArrayList<>();
+  }
+
+  @Override
+  public void handleState(Message message, State state) {
+
   }
 
   @Override

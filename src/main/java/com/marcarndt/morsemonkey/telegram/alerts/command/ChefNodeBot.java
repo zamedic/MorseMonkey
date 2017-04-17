@@ -2,12 +2,16 @@ package com.marcarndt.morsemonkey.telegram.alerts.command;
 
 import com.marcarndt.morsemonkey.exception.MorseMonkeyException;
 import com.marcarndt.morsemonkey.services.ChefService;
+import com.marcarndt.morsemonkey.services.StateService.State;
 import com.marcarndt.morsemonkey.services.TelegramService;
 import com.marcarndt.morsemonkey.services.UserService.Role;
 import com.marcarndt.morsemonkey.services.dto.Node;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.telegram.telegrambots.api.objects.Chat;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 
@@ -21,6 +25,11 @@ public class ChefNodeBot extends BaseCommand {
   ChefService chefService;
 
   @Override
+  protected Role getRole() {
+    return Role.USER;
+  }
+
+  @Override
   protected void performCommand(AbsSender absSender, User user, Chat chat, String[] arguments) {
     Node node = null;
     try {
@@ -29,6 +38,16 @@ public class ChefNodeBot extends BaseCommand {
       handleException(absSender,chat,e);
     }
     sendMessage(absSender,chat,node.getName()+" - "+node.getEnvironment()+" - "+node.getPlatform());
+  }
+
+  @Override
+  public List<State> canHandleStates() {
+    return new ArrayList<>();
+  }
+
+  @Override
+  public void handleState(Message message, State state) {
+
   }
 
   @Override

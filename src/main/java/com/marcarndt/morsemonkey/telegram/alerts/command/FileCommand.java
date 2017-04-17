@@ -2,11 +2,13 @@ package com.marcarndt.morsemonkey.telegram.alerts.command;
 
 import com.marcarndt.morsemonkey.bender.Quotes;
 import com.marcarndt.morsemonkey.services.SCPService;
+import com.marcarndt.morsemonkey.services.StateService.State;
 import com.marcarndt.morsemonkey.services.TelegramService;
 import com.marcarndt.morsemonkey.services.UserService.Role;
 import com.marcarndt.morsemonkey.services.dto.SCPResponse;
 import com.marcarndt.morsemonkey.telegram.alerts.MorseBot;
 import java.io.File;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -14,6 +16,7 @@ import javax.inject.Inject;
 import org.telegram.telegrambots.api.methods.send.SendDocument;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -31,6 +34,11 @@ public class FileCommand extends BaseCommand {
   MorseBot morseBot;
   @Inject
   SCPService scpService;
+
+  @Override
+  protected Role getRole() {
+    return Role.USER;
+  }
 
   @Override
   protected void performCommand(AbsSender absSender, User user, Chat chat, String[] arguments) {
@@ -65,6 +73,16 @@ public class FileCommand extends BaseCommand {
         LOG.log(Level.SEVERE, e1.getMessage(), e);
       }
     }
+
+  }
+
+  @Override
+  public List<State> canHandleStates() {
+    return null;
+  }
+
+  @Override
+  public void handleState(Message message, State state) {
 
   }
 

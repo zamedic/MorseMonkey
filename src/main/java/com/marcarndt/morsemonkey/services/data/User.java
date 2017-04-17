@@ -1,21 +1,19 @@
 package com.marcarndt.morsemonkey.services.data;
 
-import com.marcarndt.morsemonkey.services.UserService.Role;
-import java.util.List;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Reference;
 
 /**
  * Created by arndt on 2017/04/17.
  */
 @Entity
 public class User {
+
   @Id
   private ObjectId objectId;
   Integer userId;
-  String Name;
+  String name;
 
   public Integer getUserId() {
     return userId;
@@ -26,11 +24,11 @@ public class User {
   }
 
   public String getName() {
-    return Name;
+    return name;
   }
 
   public void setName(String name) {
-    Name = name;
+    this.name = name;
   }
 
   @Override
@@ -46,6 +44,7 @@ public class User {
 
     return objectId.equals(user.objectId);
   }
+
 
   @Override
   public int hashCode() {
