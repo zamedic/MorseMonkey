@@ -1,0 +1,8 @@
+bot:
+  key: 303007671:AAHxx3PI9zU5q-4a43WmQXU3K-A6yGY1DAU
+  name: marctestbot
+  proxy:
+    url: pchop81.standardbank.co.za
+    port: 8067
+mongo:
+  db: morse_monkey

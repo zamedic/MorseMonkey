@@ -1,0 +1,9 @@
+bot:
+ key: <%= bot_key %>
+ name: <%= node.morse_monkey.bot.name %>
+ <% if node.morse_monkey.bot.proxy != nil-%>
+ proxy:
+  url: <%= node.morse_monkey.bot.proxy.url %>
+  port: <%= node.morse_monkey.bot.proxy.port %>
+<% end -%>
+

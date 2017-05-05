@@ -2,7 +2,7 @@
 driver:
   name: vagrant
   synced_folders:
-    - [<%= File.join(ENV['PWD'], '..', '..')%>, '/tmp/repo-data']
+    - [<%= ChefFile.join(ENV['PWD'], '..', '..')%>, '/tmp/repo-data']
 
 provisioner:
   name: chef_zero
