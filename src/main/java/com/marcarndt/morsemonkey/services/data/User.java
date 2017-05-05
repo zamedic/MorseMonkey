@@ -48,6 +48,9 @@ public class User {
 
   @Override
   public int hashCode() {
+    if(objectId == null){
+      return userId;
+    }
     return objectId.hashCode();
   }
 }

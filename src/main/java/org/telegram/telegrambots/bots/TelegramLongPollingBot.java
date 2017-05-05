@@ -1,6 +1,8 @@
 package org.telegram.telegrambots.bots;
 
+import com.marcarndt.morsemonkey.utils.BotConfig;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -27,19 +29,11 @@ import java.nio.charset.StandardCharsets;
  * @date 14 of January of 2016
  */
 public abstract class TelegramLongPollingBot extends DefaultAbsSender implements LongPollingBot {
-    public TelegramLongPollingBot() {
-        this(ApiContext.getInstance(DefaultBotOptions.class));
-    }
-
-    public TelegramLongPollingBot(DefaultBotOptions options) {
-        super(options);
-    }
 
     @Override
     public void clearWebhook() throws TelegramApiRequestException {
         try (CloseableHttpClient httpclient = HttpClientBuilder.create()
             .setSSLHostnameVerifier(new NoopHostnameVerifier())
-            .setDefaultCredentialsProvider(getOptions().getHttpProxyCredentials())
             .build()) {
             String url = ApiConstants.BASE_URL + getBotToken() + "/" + SetWebhook.PATH;
             HttpGet httpGet = new HttpGet(url);

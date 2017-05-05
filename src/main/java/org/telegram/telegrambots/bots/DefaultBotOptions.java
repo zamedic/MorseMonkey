@@ -1,11 +1,15 @@
 package org.telegram.telegrambots.bots;
 
+import java.util.List;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import org.apache.http.HttpHost;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.RequestConfig;
-import org.telegram.telegrambots.generics.BotOptions;
 import org.telegram.telegrambots.updatesreceivers.ExponentialBackOff;
-
-import java.util.List;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 /**
  * @author Ruben Bermudez
@@ -13,71 +17,86 @@ import java.util.List;
  * @brief Configurations for the Bot
  * @date 21 of July of 2016
  */
-public class DefaultBotOptions implements BotOptions {
-    private int maxThreads; ///< Max number of threads used for async methods executions (default 1)
-    private RequestConfig requestConfig;
-    private ExponentialBackOff exponentialBackOff;
-    private Integer maxWebhookConnections;
-    private List<String> allowedUpdates;
-    private CredentialsProvider httpProxyCredentials;
+@Stateless
+public class DefaultBotOptions {
 
-    public DefaultBotOptions() {
-        maxThreads = 1;
-    }
+  private final Logger LOG = Logger.getLogger(DefaultBotOptions.class.getName());
 
-    public void setMaxThreads(int maxThreads) {
-        this.maxThreads = maxThreads;
-    }
+  @Inject
+  @ConfigurationValue("bot.proxy.url")
+  String botProxyUrl;
 
-    public int getMaxThreads() {
-        return maxThreads;
-    }
+  @Inject
+  @ConfigurationValue("bot.proxy.port")
+  Integer botProxyPort;
 
-    public RequestConfig getRequestConfig() {
-        return requestConfig;
-    }
+  private int maxThreads; ///< Max number of threads used for async methods executions (default 1)
+  private ExponentialBackOff exponentialBackOff;
+  private Integer maxWebhookConnections;
+  private List<String> allowedUpdates;
+  private CredentialsProvider httpProxyCredentials;
+  private RequestConfig requestConfig;
 
-    public Integer getMaxWebhookConnections() {
-        return maxWebhookConnections;
+  @PostConstruct
+  public void setup() {
+    if (botProxyPort != null && botProxyUrl != null) {
+      HttpHost httpHost = new HttpHost(botProxyUrl, botProxyPort);
+      requestConfig = RequestConfig.custom().setProxy(httpHost).build();
+    } else {
+      requestConfig = RequestConfig.DEFAULT;
     }
+  }
 
-    public void setMaxWebhookConnections(Integer maxWebhookConnections) {
-        this.maxWebhookConnections = maxWebhookConnections;
-    }
+  public DefaultBotOptions() {
+    maxThreads = 1;
+  }
 
-    public List<String> getAllowedUpdates() {
-        return allowedUpdates;
-    }
+  public void setMaxThreads(int maxThreads) {
+    this.maxThreads = maxThreads;
+  }
 
-    public void setAllowedUpdates(List<String> allowedUpdates) {
-        this.allowedUpdates = allowedUpdates;
-    }
+  public int getMaxThreads() {
+    return maxThreads;
+  }
 
-    /**
-     * @implSpec Default implementation assumes no proxy is needed and sets a 75secs timoute
-     * @param requestConfig Request config to be used in all Http requests
-     */
-    public void setRequestConfig(RequestConfig requestConfig) {
-        this.requestConfig = requestConfig;
-    }
+  public RequestConfig getRequestConfig() {
+    return requestConfig;
+  }
 
-    public ExponentialBackOff getExponentialBackOff() {
-        return exponentialBackOff;
-    }
+  public Integer getMaxWebhookConnections() {
+    return maxWebhookConnections;
+  }
 
-    /**
-     * @implSpec Default implementation assumes starting at 500ms and max time of 60 minutes
-     * @param exponentialBackOff ExponentialBackOff to be used when long polling fails
-     */
-    public void setExponentialBackOff(ExponentialBackOff exponentialBackOff) {
-        this.exponentialBackOff = exponentialBackOff;
-    }
+  public void setMaxWebhookConnections(Integer maxWebhookConnections) {
+    this.maxWebhookConnections = maxWebhookConnections;
+  }
 
-    public CredentialsProvider getHttpProxyCredentials() {
-        return httpProxyCredentials;
-    }
+  public List<String> getAllowedUpdates() {
+    return allowedUpdates;
+  }
 
-    public void setHttpProxyCredentials(CredentialsProvider httpProxyCredentials) {
-        this.httpProxyCredentials = httpProxyCredentials;
-    }
+  public void setAllowedUpdates(List<String> allowedUpdates) {
+    this.allowedUpdates = allowedUpdates;
+  }
+
+
+  public ExponentialBackOff getExponentialBackOff() {
+    return exponentialBackOff;
+  }
+
+  /**
+   * @param exponentialBackOff ExponentialBackOff to be used when long polling fails
+   * @implSpec Default implementation assumes starting at 500ms and max time of 60 minutes
+   */
+  public void setExponentialBackOff(ExponentialBackOff exponentialBackOff) {
+    this.exponentialBackOff = exponentialBackOff;
+  }
+
+  public CredentialsProvider getHttpProxyCredentials() {
+    return httpProxyCredentials;
+  }
+
+  public void setHttpProxyCredentials(CredentialsProvider httpProxyCredentials) {
+    this.httpProxyCredentials = httpProxyCredentials;
+  }
 }

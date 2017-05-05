@@ -1,7 +1,6 @@
 package com.marcarndt.morsemonkey.services.data;
 
 import com.marcarndt.morsemonkey.services.StateService.State;
-import java.util.Arrays;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -24,14 +23,13 @@ public class UserChatState {
   }
 
   public UserChatState(int userId, long chatId,
-      State state, String... parameter) {
+      State state, List<String> parameters) {
     this.userId = userId;
     this.chatId = chatId;
     this.state = state;
-    if (parameter != null){
-      this.fields = Arrays.asList(parameter);
-    }
+    this.fields = parameters;
   }
+
 
   public int getUserId() {
     return userId;

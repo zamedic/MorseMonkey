@@ -19,7 +19,7 @@ public class MorseMonkeyRestApplication extends Application {
   public Set<Class<?>> getClasses() {
     Set<Class<?>> classes = new HashSet<Class<?>>();
     classes.add(Alerts.class);
-    classes.add(Fines.class);
+    classes.add(Delivery.class);
     return classes;
   }
 }

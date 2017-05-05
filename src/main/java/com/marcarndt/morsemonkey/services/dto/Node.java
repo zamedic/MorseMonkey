@@ -5,15 +5,17 @@ package com.marcarndt.morsemonkey.services.dto;
  */
 public class Node {
 
-  public Node(String name, String environment, String platform) {
-    this.name = name;
-    this.environment = environment;
-    this.platform = platform;
-  }
-
   String name;
   String environment;
   String platform;
+  String ipAddress;
+
+  public Node(String name, String environment, String platform, String ipAddress) {
+    this.name = name;
+    this.environment = environment;
+    this.platform = platform;
+    this.ipAddress = ipAddress;
+  }
 
   public String getName() {
     return name;
@@ -37,6 +39,14 @@ public class Node {
 
   public void setPlatform(String platform) {
     this.platform = platform;
+  }
+
+  public String getIpAddress() {
+    return ipAddress;
+  }
+
+  public void setIpAddress(String ipAddress) {
+    this.ipAddress = ipAddress;
   }
 
   @Override

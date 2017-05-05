@@ -1,6 +1,7 @@
 package org.telegram.telegrambots.generics;
 
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 
 /**
@@ -30,7 +31,7 @@ public interface LongPollingBot {
      * Gets options for current bot
      * @return BotOptions object with options information
      */
-    BotOptions getOptions();
+    DefaultBotOptions getOptions();
 
     /**
      * Clear current webhook (if present) calling setWebhook method with empty url.

@@ -28,7 +28,7 @@ public class Document implements BotApiObject {
     @JsonProperty(MIMETYPE_FIELD)
     private String mimeType; ///< Optional. Mime type of a file as defined by sender
     @JsonProperty(FILESIZE_FIELD)
-    private Integer fileSize; ///< Optional. File size
+    private Integer fileSize; ///< Optional. ChefFile size
 
     public Document() {
         super();

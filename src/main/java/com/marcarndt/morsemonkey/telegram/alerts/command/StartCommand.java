@@ -37,9 +37,9 @@ public class StartCommand extends BotCommand {
     }
 
     if (!userService.adminUserExists()) {
-      userService.addUser(user.getId(), user.getFirstName(), user.getLastName(), Role.USER_ADMIN);
+      userService.addUser(user.getId(), user.getFirstName(), user.getLastName(), Role.ADMINISTRATOR);
       sendMessage = new SendMessage();
-      sendMessage.setText("You have been added as a user administrator");
+      sendMessage.setText("You have been added as an administrator");
       sendMessage.setChatId(chat.getId());
       try {
         absSender.sendMessage(sendMessage);

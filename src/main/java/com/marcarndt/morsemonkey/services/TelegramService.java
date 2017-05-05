@@ -45,13 +45,7 @@ public class TelegramService {
   @ConfigurationValue("bot.key")
   String botKey;
 
-  @Inject
-  @ConfigurationValue("bot.proxy.url")
-  String botProxyUrl;
 
-  @Inject
-  @ConfigurationValue("bot.proxy.port")
-  Integer botProxyPort;
 
   public TelegramService() {
 
@@ -63,8 +57,7 @@ public class TelegramService {
     LOG.info("Starting to initialize bots");
     BotConfig.setUsername(botName);
     BotConfig.setKey(botKey);
-    BotConfig.setProxyUrl(botProxyUrl);
-    BotConfig.setProxyPort(botProxyPort);
+
     try {
       ApiContextInitializer.init();
       api.registerBot(morseBot);

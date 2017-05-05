@@ -1,16 +1,12 @@
 package com.marcarndt.morsemonkey.telegram.alerts.command;
 
-import com.marcarndt.morsemonkey.services.StateService.State;
 import com.marcarndt.morsemonkey.services.UserService;
 import com.marcarndt.morsemonkey.services.UserService.Role;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
-import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -43,7 +39,7 @@ public class RegisterCommand extends BaseCommand {
   @Override
   protected void performCommand(AbsSender absSender, User user, Chat chat, String[] arguments) {
     LOG.info("Adding User " + user.getId() + " - " + user.getFirstName());
-    userService.addUser(user.getId(), user.getFirstName(),user.getLastName());
+    userService.addUser(user.getId(), user.getFirstName(), user.getLastName());
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(chat.getId());
     sendMessage.setText("The bot is now aware of you " + user.getFirstName());
@@ -55,13 +51,5 @@ public class RegisterCommand extends BaseCommand {
 
   }
 
-  @Override
-  public List<State> canHandleStates() {
-    return new ArrayList<>();
-  }
 
-  @Override
-  public void handleState(Message message, State state) {
-
-  }
 }

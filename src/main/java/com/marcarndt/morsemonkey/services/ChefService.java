@@ -6,6 +6,7 @@ import com.marcarndt.morsemonkey.services.data.ChefDetails;
 import com.marcarndt.morsemonkey.services.dto.Node;
 import edu.tongji.wang.chefapi.ChefApiClient;
 import edu.tongji.wang.chefapi.method.ApiMethod;
+import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,9 +91,51 @@ public class ChefService {
     String name = rootObject.getString("name");
     String env = rootObject.getString("chef_environment");
     String platform = rootObject.getJsonObject("automatic").getString("platform");
-
-    Node nodeObject = new Node(name, env, platform);
+    Node nodeObject = new Node(name, env, platform,
+        rootObject.getJsonObject("automatic").getString("ipaddress"));
 
     return nodeObject;
+  }
+
+  public void updateKey(String keyPath) throws MorseMonkeyException {
+    ChefDetails chefDetails = getChefDetails();
+
+    File file = new File(keyPath);
+    if (!file.exists()) {
+      throw new MorseMonkeyException("cannot find key file " + keyPath);
+    }
+
+    chefDetails.setKeyPath(keyPath);
+    mongoService.getDatastore().save(chefDetails);
+    setup();
+  }
+
+  private ChefDetails getChefDetails() {
+    ChefDetails chefDetails = mongoService.getDatastore().createQuery(ChefDetails.class).get();
+    if (chefDetails == null) {
+      chefDetails = new ChefDetails();
+    }
+    return chefDetails;
+  }
+
+  public void updateOrg(String org) {
+    ChefDetails chefDetails = getChefDetails();
+    chefDetails.setOrginisation(org);
+    mongoService.getDatastore().save(chefDetails);
+    setup();
+  }
+
+  public void updateServer(String server) {
+    ChefDetails chefDetails = getChefDetails();
+    chefDetails.setServerUrl(server);
+    mongoService.getDatastore().save(chefDetails);
+    setup();
+  }
+
+  public void updateUser(String user) {
+    ChefDetails chefDetails = getChefDetails();
+    chefDetails.setUserName(user);
+    mongoService.getDatastore().save(chefDetails);
+    setup();
   }
 }

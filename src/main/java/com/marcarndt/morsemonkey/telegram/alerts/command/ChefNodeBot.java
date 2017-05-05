@@ -26,7 +26,7 @@ public class ChefNodeBot extends BaseCommand {
 
   @Override
   protected Role getRole() {
-    return Role.USER;
+    return Role.TRUSTED;
   }
 
   @Override
@@ -40,15 +40,7 @@ public class ChefNodeBot extends BaseCommand {
     sendMessage(absSender,chat,node.getName()+" - "+node.getEnvironment()+" - "+node.getPlatform());
   }
 
-  @Override
-  public List<State> canHandleStates() {
-    return new ArrayList<>();
-  }
 
-  @Override
-  public void handleState(Message message, State state) {
-
-  }
 
   @Override
   public String getCommandIdentifier() {
@@ -57,6 +49,6 @@ public class ChefNodeBot extends BaseCommand {
 
   @Override
   public String getDescription() {
-    return "get Chef Node";
+    return "provides details on a chef node";
   }
 }

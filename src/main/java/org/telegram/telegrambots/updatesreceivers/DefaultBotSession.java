@@ -103,11 +103,11 @@ public class DefaultBotSession implements BotSession {
     }
 
     @Override
-    public void setOptions(BotOptions options) {
+    public void setOptions(DefaultBotOptions options) {
         if (this.options != null) {
             throw new InvalidParameterException("BotOptions has already been set");
         }
-        this.options = (DefaultBotOptions) options;
+        this.options =  options;
     }
 
     @Override

@@ -57,6 +57,12 @@
     </dependency>
 
     <dependency>
+      <groupId>com.vdurmont</groupId>
+      <artifactId>emoji-java</artifactId>
+      <version>3.2.0</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>4.5.3</version>
@@ -378,6 +384,7 @@
     </profile>
   </profiles>
 
+  <!--
   <distributionManagement>
     <snapshotRepository>
       <id>s3.releases</id>
@@ -394,8 +401,8 @@
       <url>s3://maven-releases/release</url>
     </repository>
   </repositories>
+-->
 
-  <!--
     <distributionManagement>
       <snapshotRepository>
         <id>snapshots</id>
@@ -406,7 +413,7 @@
         <url>http://nexus.standardbank.co.za:8090/nexus/content/repositories/releases</url>
       </repository>
     </distributionManagement>
-    -->
+
   <scm>
     <developerConnection>
       scm:git:ssh://builder@default@autobot-wkbxttwhfapcogjk.us-east-1.opsworks-cm.io:8989/default/Marc/MorseMonkey

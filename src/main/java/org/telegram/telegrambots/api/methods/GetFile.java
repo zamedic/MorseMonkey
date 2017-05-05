@@ -15,7 +15,7 @@ import java.io.IOException;
  * @version 1.0
  * @brief Use this method to get basic info about a file and prepare it for downloading.
  * For the moment, bots can download files of up to 20MB in size.
- * On success, a File object is returned.
+ * On success, a ChefFile object is returned.
  * The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>,
  * where <file_path> is taken from the response.
  * It is guaranteed that the link will be valid for at least 1 hour.
@@ -28,7 +28,7 @@ public class GetFile extends BotApiMethod<File> {
     private static final String FILEID_FIELD = "file_id";
 
     @JsonProperty(FILEID_FIELD)
-    private String fileId; ///< File identifier to get info about
+    private String fileId; ///< ChefFile identifier to get info about
 
     public GetFile() {
         super();

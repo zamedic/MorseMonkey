@@ -4,13 +4,16 @@ import com.marcarndt.morsemonkey.exception.MorseMonkeyException;
 import com.marcarndt.morsemonkey.services.data.HTTPEndpoint;
 import com.marcarndt.morsemonkey.telegram.alerts.MorseBot;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
@@ -20,8 +23,6 @@ import org.apache.http.impl.client.HttpClients;
 @Stateless
 public class HttpChecker {
 
-  List<HTTPEndpoint> httpNodesList = new ArrayList<>();
-
   @Inject
   TelegramService telegramService;
   @Inject
@@ -30,13 +31,9 @@ public class HttpChecker {
   MorseBot morseBot;
 
 
-  @PostConstruct
-  public void setUp() {
-    httpNodesList = mongoService.getDatastore().createQuery(HTTPEndpoint.class).asList();
-  }
-
-
   public void runChecks() {
+    List<HTTPEndpoint> httpNodesList = mongoService.getDatastore().createQuery(HTTPEndpoint.class)
+        .asList();
     for (HTTPEndpoint node : httpNodesList) {
       try {
         checkNode(node);
@@ -47,22 +44,45 @@ public class HttpChecker {
     }
   }
 
-  public void addHttpEndpoint(String description, String url){
-    HTTPEndpoint httpEndpoint = new HTTPEndpoint(description,url);
+  public void addHttpPostEndpoint(String description, String url, String body)
+      throws MorseMonkeyException {
+    HTTPEndpoint httpEndpoint = new HTTPEndpoint(description, url, body, "POST");
+    checkNode(httpEndpoint);
     mongoService.getDatastore().save(httpEndpoint);
-    httpNodesList.add(httpEndpoint);
   }
 
-  public void checkNode(HTTPEndpoint httpEndpoint) throws MorseMonkeyException {
+  public void addHttpGetEndpoint(String name, String url) throws MorseMonkeyException {
+    HTTPEndpoint httpEndpoint = new HTTPEndpoint(name, url, null, "GET");
+    checkNode(httpEndpoint);
+    mongoService.getDatastore().save(httpEndpoint);
+  }
+
+  public String checkNode(HTTPEndpoint httpEndpoint) throws MorseMonkeyException {
+    CloseableHttpResponse response;
     CloseableHttpClient httpClient = HttpClients.createDefault();
-    HttpGet httpGet = new HttpGet(httpEndpoint.getURL());
     try {
-      CloseableHttpResponse response = httpClient.execute(httpGet);
+      if(httpEndpoint.getMethod() == null){
+        httpEndpoint.setMethod("GET");
+        mongoService.getDatastore().save(httpEndpoint);
+      }
+      if (httpEndpoint.getMethod().equals("POST")) {
+        HttpPost httpPost = new HttpPost(httpEndpoint.getURL());
+        httpPost.setEntity(new StringEntity(httpEndpoint.getBody(), ContentType.APPLICATION_JSON));
+        response =httpClient.execute(httpPost);
+      } else {
+        HttpGet httpGet = new HttpGet(httpEndpoint.getURL());
+        response = httpClient.execute(httpGet);
+      }
+      InputStream in = response.getEntity().getContent();
+      String body = IOUtils.toString(in, "UTF-8");
+
       if (response.getStatusLine().getStatusCode() != 200) {
         throw new MorseMonkeyException(
             "Response code from " + httpEndpoint.getName() + " on URL " + httpEndpoint.getURL()
                 + " was " + response
-                .getStatusLine().getStatusCode() + " which is not the expected 200");
+                .getStatusLine().getStatusCode() + " which is not the expected 200. " + body);
+      } else {
+        return body;
       }
     } catch (IOException e) {
       throw new MorseMonkeyException(

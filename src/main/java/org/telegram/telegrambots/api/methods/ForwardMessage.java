@@ -28,7 +28,7 @@ public class ForwardMessage extends BotApiMethod<Message> {
     @JsonProperty(CHATID_FIELD)
     private String chatId; ///< Unique identifier for the chat to send the message to (or username for channels)
     @JsonProperty(FROMCHATID_FIELD)
-    private String fromChatId; ///< Unique identifier for the chat where the original message was sent — User or GroupChat id
+    private String fromChatId; ///< Unique identifier for the chat where the original message was sent — UserInitialize or GroupChat id
     @JsonProperty(MESSAGEID_FIELD)
     private Integer messageId; ///< Unique message identifier
     /**

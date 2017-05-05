@@ -1,18 +1,9 @@
-ssh:
- authfile: <%= node.morse_monkey_cookbook.dir%>/<%= node.morse_monkey_cookbook.auth_file%>
 bot:
  key: <%= bot_key %>
  name: <%= node.morse_monkey.bot.name %>
- group: <%= node.morse_monkey.bot.group %>
-chef:
- key: <%= node.morse_monkey_cookbook.dir%>/<%= node.morse_monkey_cookbook.chef_key%>
- server: <%= data_bag.chef.server %>
- org: <%= data_bag.chef.org %>
- userId: <%= data_bag.chef.userId %>
-users:
- file: <%= node.morse_monkey_cookbook.dir%>/<%= node.morse_monkey_cookbook.users_file %>
-recipes:
- file: <%= node.morse_monkey_cookbook.dir%>/<%= node.morse_monkey_cookbook.recipe_file %>
-monitor:
- endpoint:
-  file: <%= node.morse_monkey_cookbook.dir%>/<%= node.morse_monkey_cookbook.endpoints_file %>
+ <% if node.morse_monkey.bot.proxy != nil-%>
+ proxy:
+  url: <%= node.morse_monkey.bot.proxy.url %>
+  port: <%= node.morse_monkey.bot.proxy.port %>
+<% end -%>
+

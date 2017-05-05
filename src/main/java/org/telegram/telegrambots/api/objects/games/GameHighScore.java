@@ -36,7 +36,7 @@ public class GameHighScore implements BotApiObject {
     @JsonProperty(POSITION_FIELD)
     private Integer position; ///< Position in the game high score table
     @JsonProperty(USER_FIELD)
-    private User user; ///< User
+    private User user; ///< UserInitialize
     @JsonProperty(SCORE_FIELD)
     private Integer score; ///< Score
 

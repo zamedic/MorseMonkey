@@ -1,6 +1,7 @@
 package org.telegram.telegrambots.bots;
 
 
+import javax.annotation.PostConstruct;
 import org.telegram.telegrambots.ApiContext;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
@@ -20,35 +21,12 @@ import java.util.function.BiConsumer;
 public abstract class TelegramLongPollingCommandBot extends TelegramLongPollingBot implements ICommandRegistry {
     private CommandRegistry commandRegistry;
 
-    /**
-     * Creates a TelegramLongPollingCommandBot using default options
-     * Use ICommandRegistry's methods on this bot to register commands
-     */
-    public TelegramLongPollingCommandBot() {
-        this(ApiContext.getInstance(DefaultBotOptions.class));
+
+    private void setupCommandRegistry(){
+        this.commandRegistry = new CommandRegistry(true, getBotUsername());
     }
 
-    /**
-     * Creates a TelegramLongPollingCommandBot with custom options and allowing commands with
-     * usernames
-     * Use ICommandRegistry's methods on this bot to register commands
-     * @param options Bot options
-     */
-    public TelegramLongPollingCommandBot(DefaultBotOptions options) {
-        this(options, true);
-    }
 
-    /**
-     * Creates a TelegramLongPollingCommandBot
-     * Use ICommandRegistry's methods on this bot to register commands
-     * @param options Bot options
-     * @param allowCommandsWithUsername true to allow commands with parameters (default),
-     *                                  false otherwise
-     */
-    public TelegramLongPollingCommandBot(DefaultBotOptions options, boolean allowCommandsWithUsername) {
-        super(options);
-        this.commandRegistry = new CommandRegistry(allowCommandsWithUsername, getBotUsername());
-    }
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -82,6 +60,9 @@ public abstract class TelegramLongPollingCommandBot extends TelegramLongPollingB
 
     @Override
     public boolean register(BotCommand botCommand) {
+        if(commandRegistry == null){
+            setupCommandRegistry();
+        }
         return commandRegistry.register(botCommand);
     }
 

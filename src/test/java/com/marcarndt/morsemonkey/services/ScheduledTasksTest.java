@@ -1,6 +1,5 @@
 package com.marcarndt.morsemonkey.services;
 
-import static junit.framework.TestCase.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
@@ -18,7 +17,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 /**
  * Created by arndt on 2017/04/09.
@@ -36,60 +34,36 @@ public class ScheduledTasksTest {
   @InjectMocks
   private transient ScheduledTasks scheduledTasks;
 
-  @Before
-  public void setUp() {
-    when(telegramService.getMorseBot()).thenReturn(morseBot);
-  }
 
   @Test
   public void remindStanup() {
     Message message = new Message();
-    try {
-      when(morseBot.sendMessage(any(SendMessage.class))).thenReturn(message);
-    } catch (TelegramApiException e) {
-      fail(e.getMessage());
-    }
 
-    ArgumentMatcher<SendMessage> matcher = new ArgumentMatcher<SendMessage>() {
+    when(morseBot.sendMessage(any(SendMessage.class))).thenReturn(message);
+
+    ArgumentMatcher<String> matcher = new ArgumentMatcher<String>() {
       @Override
-      public boolean matches(SendMessage sendMessage) {
-        return sendMessage.getText().startsWith("Standup in 15 minutes.");
+      public boolean matches(String sendMessage) {
+        return sendMessage.startsWith("Standup in 15 minutes.");
       }
     };
 
     scheduledTasks.remindStanup();
 
-    try {
-      verify(morseBot).sendMessage(argThat(matcher));
-    } catch (TelegramApiException e) {
-      fail(e.getMessage());
-    }
+    verify(morseBot).sendAlertMessage(argThat(matcher));
+
 
   }
 
   @Test
   public void startStandup() {
     Message message = new Message();
-    try {
-      when(morseBot.sendMessage(any(SendMessage.class))).thenReturn(message);
-    } catch (TelegramApiException e) {
-      fail(e.getMessage());
-    }
 
-    ArgumentMatcher<SendMessage> matcher = new ArgumentMatcher<SendMessage>() {
-      @Override
-      public boolean matches( SendMessage sendMessage) {
-        return sendMessage.getText().startsWith("If you are not at Standup, you are officially late.");
-      }
-    };
+    when(morseBot.sendMessage(any(SendMessage.class))).thenReturn(message);
 
     scheduledTasks.startStandup();
 
-    try {
-      verify(morseBot).sendMessage(argThat(matcher));
-    } catch (TelegramApiException e) {
-      fail(e.getMessage());
-    }
+    verify(morseBot).sendAlertMessage("If you are not at Standup, you are officially late.");
 
 
   }

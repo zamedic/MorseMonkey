@@ -28,7 +28,7 @@ public class Sticker implements BotApiObject {
     @JsonProperty(THUMB_FIELD)
     private PhotoSize thumb; ///< Optional. Sticker thumbnail in .webp or .jpg format
     @JsonProperty(FILESIZE_FIELD)
-    private Integer fileSize; ///< Optional. File size
+    private Integer fileSize; ///< Optional. ChefFile size
     @JsonProperty(EMOJI_FIELD)
     private String emoji; ///< Optional. Emoji associated with the sticker
 

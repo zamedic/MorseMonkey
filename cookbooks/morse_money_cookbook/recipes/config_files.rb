@@ -11,23 +11,3 @@ template "#{node['morse_monkey_cookbook']['dir']}/#{['morse_monkey_cookbook']['a
   })
 end
 
-template "#{node['morse_monkey_cookbook']['dir']}/#{['morse_monkey_cookbook']['users_file']}" do
-  source 'users.erb'
-  variables({
-                users: config.users
-            })
-end
-
-template "#{node['morse_monkey_cookbook']['dir']}/#{['morse_monkey_cookbook']['recipe_file']}" do
-  source 'users.erb'
-  variables({
-                cookbooks: config.cookbooks
-            })
-end
-
-template "#{node['morse_monkey_cookbook']['dir']}/#{['morse_monkey_cookbook']['endpoints_file']}" do
-  source 'users.erb'
-  variables({
-                cookbooks: config.monitor.endpoints
-            })
-end

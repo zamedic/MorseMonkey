@@ -32,7 +32,7 @@ public class InlineQueryResultGif implements InlineQueryResult {
     @JsonProperty(ID_FIELD)
     private String id; ///< Unique identifier of this result, 1-64 bytes
     @JsonProperty(GIFURL_FIELD)
-    private String gifUrl; ///< A valid URL for the GIF file. File size must not exceed 1MB
+    private String gifUrl; ///< A valid URL for the GIF file. ChefFile size must not exceed 1MB
     @JsonProperty(GIFWIDTH_FIELD)
     private Integer gifWidth; ///< Optional. Width of the GIF
     @JsonProperty(GIFHEIGHT_FIELD)

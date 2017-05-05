@@ -30,7 +30,7 @@ public interface WebhookBot {
     String getBotToken();
 
     /**
-     * Execute setWebhook method to set up the url of the webhook
+     * ExecuteSSH setWebhook method to set up the url of the webhook
      * @param url Url for the webhook
      * @param publicCertificatePath Path to the public key certificate of the webhook
      * @throws TelegramApiRequestException In case of error executing the request

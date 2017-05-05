@@ -26,7 +26,7 @@ public class Audio implements BotApiObject {
     @JsonProperty(MIMETYPE_FIELD)
     private String mimeType; ///< Optional. MIME type of the file as defined by sender
     @JsonProperty(FILESIZE_FIELD)
-    private Integer fileSize; ///< Optional. File size
+    private Integer fileSize; ///< Optional. ChefFile size
     @JsonProperty(TITLE_FIELD)
     private String title; ///< Optional. Title of the audio as defined by sender or by audio tags
     @JsonProperty(PERFORMER_FIELD)

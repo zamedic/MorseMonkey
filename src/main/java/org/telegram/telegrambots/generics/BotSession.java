@@ -1,5 +1,7 @@
 package org.telegram.telegrambots.generics;
 
+import org.telegram.telegrambots.bots.DefaultBotOptions;
+
 /**
  * @author Ruben Bermudez
  * @version 1.0
@@ -7,7 +9,7 @@ package org.telegram.telegrambots.generics;
  * @date 29 of October of 2016
  */
 public interface BotSession {
-    void setOptions(BotOptions options);
+    void setOptions(DefaultBotOptions options);
     void setToken(String token);
     void setCallback(LongPollingBot callback);
 

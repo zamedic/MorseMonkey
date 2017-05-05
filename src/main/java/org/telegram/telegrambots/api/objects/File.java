@@ -21,9 +21,9 @@ public class File implements BotApiObject {
     @JsonProperty(FILE_ID)
     private String fileId; ///< Unique identifier for this file
     @JsonProperty(FILE_SIZE_FIELD)
-    private Integer fileSize; ///< Optional. File size, if known
+    private Integer fileSize; ///< Optional. ChefFile size, if known
     @JsonProperty(FILE_PATH_FIELD)
-    private String filePath; ///< Optional. File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
+    private String filePath; ///< Optional. ChefFile path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
 
     public File() {
         super();
@@ -43,7 +43,7 @@ public class File implements BotApiObject {
 
     @Override
     public String toString() {
-        return "File{" +
+        return "ChefFile{" +
                 "fileId='" + fileId + '\'' +
                 ", fileSize=" + fileSize +
                 ", filePath='" + filePath + '\'' +

@@ -20,11 +20,11 @@ public class User implements BotApiObject {
     @JsonProperty(ID_FIELD)
     private Integer id; ///< Unique identifier for this user or bot
     @JsonProperty(FIRSTNAME_FIELD)
-    private String firstName; ///< User‘s or bot’s first name
+    private String firstName; ///< UserInitialize‘s or bot’s first name
     @JsonProperty(LASTNAME_FIELD)
-    private String lastName; ///< Optional. User‘s or bot’s last name
+    private String lastName; ///< Optional. UserInitialize‘s or bot’s last name
     @JsonProperty(USERNAME_FIELD)
-    private String userName; ///< Optional. User‘s or bot’s username
+    private String userName; ///< Optional. UserInitialize‘s or bot’s username
 
     public User() {
         super();
@@ -48,7 +48,7 @@ public class User implements BotApiObject {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserInitialize{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

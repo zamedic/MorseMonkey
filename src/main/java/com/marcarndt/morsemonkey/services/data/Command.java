@@ -15,6 +15,14 @@ public class Command {
   String description;
   String command;
 
+  public Command() {
+  }
+
+  public Command(String description, String command) {
+    this.description = description;
+    this.command = command;
+  }
+
   public String getDescription() {
     return description;
   }

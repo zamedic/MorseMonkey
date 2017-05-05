@@ -37,22 +37,12 @@ public class HelpCommand extends BaseCommand {
     stringBuilder.append("----------------------\n");
 
     for (BotCommand command: morseBot.getRegisteredCommands()) {
-      stringBuilder.append(command.toString()).append("\n");
+      stringBuilder.append(command.getCommandIdentifier()).append(" - ");
+      stringBuilder.append(command.getDescription()).append("\n");
     }
     stringBuilder.append(Quotes.getRandomQuote());
 
     sendMessage(absSender, chat, stringBuilder.toString());
-
-
-  }
-
-  @Override
-  public List<State> canHandleStates() {
-    return null;
-  }
-
-  @Override
-  public void handleState(Message message, State state) {
 
   }
 

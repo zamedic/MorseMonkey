@@ -65,7 +65,7 @@ public class TelegramServiceTest {
     when(query.count()).thenReturn(0l);
 
     try {
-      whenNew(MorseBot.class).withArguments(telegramService).thenReturn(morseBot);
+      whenNew(MorseBot.class).withNoArguments().thenReturn(morseBot);
       whenNew(InitialContext.class).withNoArguments().thenReturn(initialContext);
 
     } catch (Exception e) {
@@ -94,7 +94,6 @@ public class TelegramServiceTest {
     } catch (TelegramApiRequestException e) {
       fail(e.getMessage());
     }
-    telegramService.setApi(telegramBotsApi);
     telegramService.setup();
     verify(logger).log(Level.SEVERE, "Test Exception", exception);
   }

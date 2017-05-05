@@ -34,11 +34,11 @@ public class SendContact extends BotApiMethod<Message> {
     @JsonProperty(CHATID_FIELD)
     private String chatId; ///< Unique identifier for the chat to send the message to (Or username for channels)
     @JsonProperty(PHONE_NUMBER_FIELD)
-    private String phoneNumber; ///< User's phone number
+    private String phoneNumber; ///< UserInitialize's phone number
     @JsonProperty(FIRST_NAME_FIELD)
-    private String firstName; ///< User's first name
+    private String firstName; ///< UserInitialize's first name
     @JsonProperty(LAST_NAME_FIELD)
-    private String lastName; ///< Optional. User's last name
+    private String lastName; ///< Optional. UserInitialize's last name
     /**
      * Optional. Sends the message silently. iOS users will not receive a notification, Android
      * users will receive a notification with no sound. Other apps coming soon

@@ -25,7 +25,7 @@ public class PhotoSize implements BotApiObject {
     @JsonProperty(HEIGHT_FIELD)
     private Integer height; ///< Photo height
     @JsonProperty(FILESIZE_FIELD)
-    private Integer fileSize; ///< Optional. File size
+    private Integer fileSize; ///< Optional. ChefFile size
     @JsonProperty(FILEPATH_FIELD)
     private String filePath; ///< Undocumented field. Optional. Can contain the path to download the file direclty without calling to getFile
 

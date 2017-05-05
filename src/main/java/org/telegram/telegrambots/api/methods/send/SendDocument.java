@@ -30,7 +30,7 @@ public class SendDocument extends PartialBotApiMethod<Message> {
     public static final String REPLYTOMESSAGEID_FIELD = "reply_to_message_id";
     public static final String REPLYMARKUP_FIELD = "reply_markup";
     private String chatId; ///< Unique identifier for the chat to send the message to or Username for the channel to send the message to
-    private String document; ///< File file to send. file_id as String to resend a file that is already on the Telegram servers or Url to upload it
+    private String document; ///< ChefFile file to send. file_id as String to resend a file that is already on the Telegram servers or Url to upload it
     private String caption; ///< Optional. Document caption (may also be used when resending documents by file_id), 0-200 characters
     /**
      * Optional. Sends the message silently. iOS users will not receive a notification, Android

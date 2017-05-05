@@ -6,7 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-include_recipe 'java'
+include_recipe 'java' if node['morse_monkey']['install_java']
 
 chef_gem 'chef-vault' do
   action :nothing
@@ -27,6 +27,5 @@ end
 
 include_recipe 'morce_monkey::config_files'
 
-write_auth()
 
 execute "java -jar  /opt/morse_monkey/morsemonkey.jar -Dswarm.project.stage.file=#{node['morse_monkey_cookbook']['dir']}/#{node['morse_monkey_cookbook']['application_yml']}	 > /var/log/morse_monkey.log &"

@@ -29,25 +29,28 @@ public class UserService {
    * All other roles will be validated
    * @return true if the user has the role
    */
-  public boolean validateUser(Integer id, Role role) {
+  public boolean validateUser(Integer id, Role role) throws MorseMonkeyException {
     if (role.equals(Role.UNAUTHENTICATED)) {
       return true;
     }
 
     User user = getUser(id);
-    if (role.equals(Role.USER) && user != null) {
-      return true;
-    }
     if (user == null) {
-      return false;
+      throw new MorseMonkeyException("You are not known to me human. Use /register to make me aware of your presence. ");
+    }
+    if (role.equals(Role.USER)) {
+      return true;
     }
 
     UserRole userRole = getUserRole(role);
+    if (userRole == null) {
+      return false;
+    }
     return userRole.getUsers().contains(user);
   }
 
   public boolean adminUserExists() {
-    UserRole userRole = getUserRole(Role.USER_ADMIN);
+    UserRole userRole = getUserRole(Role.ADMINISTRATOR);
     return userRole != null && !(userRole.getUsers() == null || userRole.getUsers().size() == 0);
 
   }
@@ -146,7 +149,7 @@ public class UserService {
   }
 
   public enum Role {
-    USER_ADMIN, COMMAND, USER, UNAUTHENTICATED, ADMINISTRATOR
+     USER, UNAUTHENTICATED, VCM, ADMINISTRATOR, TRUSTED
   }
 
 }

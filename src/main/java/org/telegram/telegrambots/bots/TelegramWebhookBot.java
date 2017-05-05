@@ -1,5 +1,7 @@
 package org.telegram.telegrambots.bots;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -30,17 +32,10 @@ import java.nio.charset.StandardCharsets;
  * <a href="https://core.telegram.org/bots/api#setwebhook">webhook</a>
  * @date 14 of January of 2016
  */
+
 public abstract class TelegramWebhookBot extends DefaultAbsSender implements WebhookBot {
+    @Inject
     private DefaultBotOptions botOptions;
-
-    public TelegramWebhookBot() {
-        this(ApiContext.getInstance(DefaultBotOptions.class));
-    }
-
-    public TelegramWebhookBot(DefaultBotOptions options) {
-        super(options);
-        this.botOptions = options;
-    }
 
     @Override
     public void setWebhook(String url, String publicCertificatePath) throws TelegramApiRequestException {

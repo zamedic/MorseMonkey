@@ -59,7 +59,7 @@ public abstract class BotCommand {
     }
 
     /**
-     * Execute the command
+     * ExecuteSSH the command
      *
      * @param absSender absSender to send messages over
      * @param user      the user who sent the command
